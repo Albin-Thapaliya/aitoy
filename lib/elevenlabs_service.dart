@@ -20,17 +20,15 @@ class VoiceService {
       body: jsonEncode({
         'text': text,
         'model_id': 'eleven_monolingual_v1',
-        'voice_settings': {
-          'stability': 0.5,  // Set this to 0.8 if higher stability is required
-          'similarity_boost': 0.5  // Set this to 0.75 for greater similarity
-        }
+        'voice_settings': {'stability': 0.5, 'similarity_boost': 0.5}
       }),
     );
-  
+
     if (response.statusCode == 200) {
       return response.bodyBytes;
     } else {
-      print('Failed to fetch or convert speech from ElevenLabs API: ${response.statusCode} ${response.reasonPhrase}');
+      print(
+          'Failed to fetch or convert speech from ElevenLabs API: ${response.statusCode} ${response.reasonPhrase}');
       return null;
     }
   }

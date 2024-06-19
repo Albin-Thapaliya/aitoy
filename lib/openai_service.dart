@@ -7,7 +7,8 @@ class GPTService {
 
   GPTService(this.apiKey);
 
-  Future<String> getResponse(String userInput, Map<String, dynamic> profile) async {
+  Future<String> getResponse(
+      String userInput, Map<String, dynamic> profile) async {
     List<Map<String, dynamic>> messages = [
       {'role': 'system', 'content': profile['context']},
       {'role': 'user', 'content': userInput}
@@ -32,7 +33,8 @@ class GPTService {
       return data['choices'][0]['message']['content'];
     } else {
       final errorData = jsonDecode(response.body);
-      throw Exception('Failed to fetch response from OpenAI: ${errorData['error']['message']}');
+      throw Exception(
+          'Failed to fetch response from OpenAI: ${errorData['error']['message']}');
     }
   }
 }

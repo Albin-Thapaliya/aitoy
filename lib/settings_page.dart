@@ -45,11 +45,14 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _getPairedDevices() async {
     try {
-      final Map<dynamic, dynamic> result = await platform.invokeMethod('getPairedDevices');
+      final Map<dynamic, dynamic> result =
+          await platform.invokeMethod('getPairedDevices');
       setState(() {
         outputDevices = result.keys.cast<String>().toSet().toList();
         if (!outputDevices.contains(selectedOutputDevice)) {
-          selectedOutputDevice = outputDevices.isNotEmpty ? outputDevices.first : 'Default Speaker';
+          selectedOutputDevice = outputDevices.isNotEmpty
+              ? outputDevices.first
+              : 'Default Speaker';
         }
       });
     } on PlatformException catch (e) {
@@ -63,7 +66,8 @@ class _SettingsPageState extends State<SettingsPage> {
     await prefs.setString('elevenLabsToken', elevenLabsTokenController.text);
     await prefs.setString('selectedOutputDevice', selectedOutputDevice);
     await prefs.setString('voiceId', voiceIdController.text);
-    await prefs.setString('porcupineAccessKey', porcupineAccessKeyController.text);
+    await prefs.setString(
+        'porcupineAccessKey', porcupineAccessKeyController.text);
 
     Navigator.pop(context);
   }
@@ -88,7 +92,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     selectedOutputDevice = newValue!;
                   });
                 },
-                items: outputDevices.map<DropdownMenuItem<String>>((String value) {
+                items:
+                    outputDevices.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
