@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -14,6 +14,7 @@ class _SettingsPageState extends State<SettingsPage> {
   TextEditingController openAiTokenController = TextEditingController();
   TextEditingController elevenLabsTokenController = TextEditingController();
   TextEditingController voiceIdController = TextEditingController();
+  TextEditingController porcupineAccessKeyController = TextEditingController();
 
   List<String> outputDevices = [];
   static const platform = MethodChannel('bluetooth_plugin');
@@ -31,12 +32,14 @@ class _SettingsPageState extends State<SettingsPage> {
     String? elevenLabsToken = prefs.getString('elevenLabsToken');
     String? selectedOutputDevice = prefs.getString('selectedOutputDevice');
     String? voiceId = prefs.getString('voiceId');
+    String? porcupineAccessKey = prefs.getString('porcupineAccessKey');
 
     setState(() {
       openAiTokenController.text = openAiToken ?? '';
       elevenLabsTokenController.text = elevenLabsToken ?? '';
       this.selectedOutputDevice = selectedOutputDevice ?? 'Default Speaker';
       voiceIdController.text = voiceId ?? '';
+      porcupineAccessKeyController.text = porcupineAccessKey ?? '';
     });
   }
 
@@ -60,6 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
     await prefs.setString('elevenLabsToken', elevenLabsTokenController.text);
     await prefs.setString('selectedOutputDevice', selectedOutputDevice);
     await prefs.setString('voiceId', voiceIdController.text);
+    await prefs.setString('porcupineAccessKey', porcupineAccessKeyController.text);
 
     Navigator.pop(context);
   }
@@ -72,54 +76,64 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Output Sound Device', style: TextStyle(fontSize: 16)),
-            DropdownButton<String>(
-              value: selectedOutputDevice,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedOutputDevice = newValue!;
-                });
-              },
-              items: outputDevices.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: voiceIdController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Voice ID',
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Output Sound Device', style: TextStyle(fontSize: 16)),
+              DropdownButton<String>(
+                value: selectedOutputDevice,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedOutputDevice = newValue!;
+                  });
+                },
+                items: outputDevices.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: openAiTokenController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'OpenAI Token',
+              const SizedBox(height: 20),
+              TextField(
+                controller: voiceIdController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Voice ID',
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: elevenLabsTokenController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Eleven Labs Token',
+              const SizedBox(height: 20),
+              TextField(
+                controller: openAiTokenController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'OpenAI Token',
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _saveSettings,
-              child: const Text('Save Settings'),
-            ),
-          ],
+              const SizedBox(height: 20),
+              TextField(
+                controller: elevenLabsTokenController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Eleven Labs Token',
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: porcupineAccessKeyController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Porcupine Access Key',
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _saveSettings,
+                child: const Text('Save Settings'),
+              ),
+            ],
+          ),
         ),
       ),
     );

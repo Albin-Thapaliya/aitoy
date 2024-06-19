@@ -92,9 +92,11 @@ void _initializeSpeech() async {
 }
 
   void _initPorcupine() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String accessKey = prefs.getString('porcupineAccessKey') ?? '';
     try {
       _porcupineManager = await PorcupineManager.fromKeywordPaths(
-        "// add api key here of porcupine",
+        accessKey,
         ["assets/keywords/Hey-Rodney_en_android_v3_0_0.ppn"],
         _wakeWordDetected,
       );
