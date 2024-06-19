@@ -53,6 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController promptController = TextEditingController();
   String openAiToken = '';
   String elevenLabsToken = '';
+  String VoiceId = '';
   String openAiResponse = '';
   final audioPlayer = AudioPlayer();
 
@@ -233,7 +234,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _playResponse(String text) async {
-    final voiceService = VoiceService(elevenLabsToken, "7p1Ofvcwsv7UBPoFNcpI");
+    final voiceService = VoiceService(elevenLabsToken, VoiceId );
     try {
       Uint8List? audioData = await voiceService.textToSpeech(text);
       if (audioData != null) {
@@ -262,6 +263,7 @@ class _ProfilePageState extends State<ProfilePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     openAiToken = prefs.getString('openAiToken') ?? '';
     elevenLabsToken = prefs.getString('elevenLabsToken') ?? '';
+    VoiceId = prefs.getString('voiceId') ?? '';
   }
 
   void _savePromptToPreferences(String newPrompt) async {
